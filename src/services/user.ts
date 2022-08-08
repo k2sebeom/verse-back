@@ -18,6 +18,17 @@ export default class UserService {
     }
   };
 
+  public getUserById = async (id: number): Promise<User | null> => {
+    const user = await db.user.findUnique({
+      where: { id },
+    });
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  };
+
   public createUser = async (
     email: string,
     password: string

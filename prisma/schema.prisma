@@ -22,4 +22,8 @@ model User {
   refreshToken String @default("")
   role         Role   @default(AUDIENCE)
   points       Int    @default(500)
+
+  streamKey String?
+  liveUrl   String?
+  tracks    String[]
 }

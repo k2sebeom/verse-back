@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mux/mux-node": "^6.2.0",
     "@prisma/client": "^4.1.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",

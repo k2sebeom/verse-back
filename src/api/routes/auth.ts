@@ -43,6 +43,7 @@ export default (app: Router) => {
         email: user.email,
         points: user.points,
         role: user.role,
+        streamKey: user.streamKey,
         ...cred,
       },
     });
