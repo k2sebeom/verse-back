@@ -36,6 +36,7 @@ export default (app: Router) => {
 
     res.send({
         id: user.id,
+        nickname: user.nickname,
         points: user.points,
         liveUrl: user.liveUrl,
         tracks: user.tracks
