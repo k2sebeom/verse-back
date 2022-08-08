@@ -13,7 +13,7 @@ export default async (io: Server) => {
         console.log(`${socket.id} joined room ${id}`);
 
         const roomService = Container.get(RoomService);
-        roomService.addPlayer(parseInt(id), { ...data, id: socket.id });
+        roomService.addPlayer(parseInt(id), { ...data, id: socket.id, nickname: "" });
 
         socket.emit('members', {
           id: socket.id,
@@ -32,6 +32,7 @@ export default async (io: Server) => {
         });
 
         socket.on('name', (data) => {
+          roomService.setPlayerName(parseInt(id), socket.id, data);
           socket.broadcast.to(id).emit('name', {
             id: socket.id,
             name: data

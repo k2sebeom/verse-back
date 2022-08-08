@@ -21,6 +21,12 @@ export default class RoomService {
         }
     }
 
+    public setPlayerName(roomId: number, playerId: string, nickname: string) {
+        if(this.rooms[roomId]) {
+            this.rooms[roomId][playerId].nickname = nickname;
+        }
+    }
+
     public updatePlayer(roomId: number, playerId: string, pos: number[]) {
         if(this.rooms[roomId]) {
             this.rooms[roomId][playerId].pos = pos;

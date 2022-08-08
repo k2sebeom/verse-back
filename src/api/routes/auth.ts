@@ -41,6 +41,7 @@ export default (app: Router) => {
       result: {
         id: user.id,
         email: user.email,
+        nickname: user.nickname,
         points: user.points,
         role: user.role,
         streamKey: user.streamKey,
@@ -50,8 +51,8 @@ export default (app: Router) => {
   });
 
   route.post('/signup', async (req: SignUpRequest, res: Response) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { email, password, nickname } = req.body;
+    if (!email || !password || !nickname) {
       res.status(400).send({ msg: 'Invalid Fields' });
       return;
     }
@@ -65,13 +66,14 @@ export default (app: Router) => {
       return;
     }
 
-    const newUser = await userService.createUser(email, password);
+    const newUser = await userService.createUser(email, password, nickname);
     const cred = await userService.updateUserRefreshToken(newUser.id);
 
     res.send({
       result: {
         id: newUser.id,
         email: newUser.email,
+        nickname: newUser.nickname,
         ...cred,
       },
     });

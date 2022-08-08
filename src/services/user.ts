@@ -31,7 +31,8 @@ export default class UserService {
 
   public createUser = async (
     email: string,
-    password: string
+    password: string,
+    nickname: string
   ): Promise<User> => {
     const pwHash = await bcrypt.hash(password, 12);
 
@@ -39,6 +40,7 @@ export default class UserService {
       data: {
         email,
         pw: pwHash,
+        nickname
       },
     });
   };

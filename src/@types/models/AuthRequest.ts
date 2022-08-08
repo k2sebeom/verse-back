@@ -4,6 +4,7 @@ interface SignUpRequest extends Request {
   body: {
     email: string;
     password: string;
+    nickname: string;
   };
 }
 

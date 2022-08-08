@@ -1,5 +1,5 @@
 interface Player {
-    nickName: string;
+    nickname: string;
     spriteName: string;
     id: string;
     pos: number[]
