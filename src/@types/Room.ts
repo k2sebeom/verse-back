@@ -1,10 +1,10 @@
-
-interface JoinRequest {
+interface Player {
     nickName: string;
     spriteName: string;
-    pos: number[];
+    id: string;
+    pos: number[]
 }
 
 export type {
-    JoinRequest
+    Player
 }
