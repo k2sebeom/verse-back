@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Credentials, TokenInterface } from '../@types/Auth';
 import config from '../config';
 
@@ -23,7 +23,6 @@ export function verifyToken(jwtToken: string): number | null {
   } catch {
     return null;
   }
-  return null;
 }
 
 export function getCredentials(id: number): Credentials {

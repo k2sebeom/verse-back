@@ -51,8 +51,8 @@ export default (app: Router) => {
   });
 
   route.post('/signup', async (req: SignUpRequest, res: Response) => {
-    const { email, password, nickname } = req.body;
-    if (!email || !password || !nickname) {
+    const { email, password, nickname, isMusician } = req.body;
+    if (!email || !password || !nickname || !isMusician) {
       res.status(400).send({ msg: 'Invalid Fields' });
       return;
     }
@@ -66,7 +66,7 @@ export default (app: Router) => {
       return;
     }
 
-    const newUser = await userService.createUser(email, password, nickname);
+    const newUser = await userService.createUser(email, password, nickname, isMusician);
     const cred = await userService.updateUserRefreshToken(newUser.id);
 
     res.send({

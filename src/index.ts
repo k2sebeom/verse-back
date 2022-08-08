@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import * as express from 'express';
+import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import config from './config';

@@ -1,12 +1,21 @@
 import { Service } from 'typedi';
 import db from '../utils/db';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { getCredentials, validateToken } from '../utils/token';
 import { Credentials } from '../@types/Auth';
+import Mux from '@mux/mux-node';
+import config from '../config';
+
 
 @Service()
 export default class UserService {
+  public muxClient: Mux;
+
+  constructor() {
+    this.muxClient = new Mux(config.muxTokenId, config.muxTokenSecret);
+  }
+
   public getUser = async (email: string): Promise<User | null> => {
     const user = await db.user.findUnique({
       where: { email },
@@ -32,15 +41,35 @@ export default class UserService {
   public createUser = async (
     email: string,
     password: string,
-    nickname: string
+    nickname: string,
+    isMusician: boolean
   ): Promise<User> => {
     const pwHash = await bcrypt.hash(password, 12);
+
+    let streamKey = '';
+    let liveUrl = '';
+
+    if(isMusician) {
+      const stream = await this.muxClient.Video.LiveStreams.create({
+        playback_policy: 'public',
+        new_asset_settings: {
+          playback_policy: 'public'
+        },
+        embedded_subtitles: [],
+        latency_mode: 'low'
+      });
+
+      streamKey = stream.stream_key;
+      liveUrl = `https://stream.mux.com/${stream.playback_ids[0].id}.m3u8`;
+    }
 
     return await db.user.create({
       data: {
         email,
         pw: pwHash,
-        nickname
+        nickname,
+        role: isMusician ? 'MUSICIAN' : 'AUDIENCE',
+        streamKey, liveUrl
       },
     });
   };

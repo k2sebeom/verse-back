@@ -5,6 +5,7 @@ interface SignUpRequest extends Request {
     email: string;
     password: string;
     nickname: string;
+    isMusician: boolean;
   };
 }
 
