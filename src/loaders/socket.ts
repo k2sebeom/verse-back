@@ -9,16 +9,22 @@ export default async (io: Server) => {
       socket.on('join', (id: string, data: JoinRequest) => {
         socket.join(id);
         console.log(`${socket.id} joined room ${id}`);
-        console.log(data);
 
-        io.to(id).emit('join', data);
+        socket.broadcast.to(id).emit('join', { ...data, id: socket.id });
 
         socket.on('msg', (data) => {
           socket.broadcast.to(id).emit('msg', data);
         });
 
+        socket.on('transform', (data) => {
+          socket.broadcast.to(id).emit('transform', { ...data, id: socket.id });
+        })
+
         socket.on('disconnect', (reason) => {
           console.log(`${socket.id} disconnected`);
+          io.to(id).emit('leave', {
+            id: socket.id
+          })
         })
       })
     });
