@@ -6,14 +6,13 @@ import {
 } from '../../@types/models/AuthRequest';
 import Container from 'typedi';
 import UserService from '../../services/user';
-import isAuth from '../middlewares/isAuth';
 
 const route = Router();
 
 export default (app: Router) => {
   app.use('/auth', route);
 
-  route.post('/signin', isAuth, async (req: SignInRequest, res: Response) => {
+  route.post('/signin', async (req: SignInRequest, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(400).send({ msg: 'Invalid Fields' });
@@ -42,6 +41,8 @@ export default (app: Router) => {
       result: {
         id: user.id,
         email: user.email,
+        points: user.points,
+        role: user.role,
         ...cred,
       },
     });

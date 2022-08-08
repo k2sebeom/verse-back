@@ -10,9 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  MUSICIAN
+  AUDIENCE
+}
+
 model User {
   id           Int    @id @default(autoincrement())
   email        String @unique
   pw           String
   refreshToken String @default("")
+  role         Role   @default(AUDIENCE)
+  points       Int    @default(500)
 }

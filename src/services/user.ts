@@ -1,14 +1,14 @@
 import { Service } from 'typedi';
 import db from '../utils/db';
 import * as bcrypt from 'bcrypt';
-import { Auth } from '@prisma/client';
+import { User } from '@prisma/client';
 import { getCredentials, validateToken } from '../utils/token';
 import { Credentials } from '../@types/Auth';
 
 @Service()
 export default class UserService {
-  public getUser = async (email: string): Promise<Auth | null> => {
-    const user = await db.auth.findUnique({
+  public getUser = async (email: string): Promise<User | null> => {
+    const user = await db.user.findUnique({
       where: { email },
     });
     if (user) {
@@ -21,10 +21,10 @@ export default class UserService {
   public createUser = async (
     email: string,
     password: string
-  ): Promise<Auth> => {
+  ): Promise<User> => {
     const pwHash = await bcrypt.hash(password, 12);
 
-    return await db.auth.create({
+    return await db.user.create({
       data: {
         email,
         pw: pwHash,
@@ -35,7 +35,7 @@ export default class UserService {
   public updateUserRefreshToken = async (id: number): Promise<Credentials> => {
     const cred = getCredentials(id);
 
-    await db.auth.update({
+    await db.user.update({
       where: { id },
       data: {
         refreshToken: cred.refreshToken,
@@ -56,7 +56,7 @@ export default class UserService {
     refreshToken: string,
     id: number
   ): Promise<boolean> => {
-    const user = await db.auth.findUnique({
+    const user = await db.user.findUnique({
       where: { id },
     });
     const token = refreshToken.replace('Bearer ', '');
