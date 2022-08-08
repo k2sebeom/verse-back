@@ -5,7 +5,7 @@ import {
   SignUpRequest,
 } from '../../@types/models/AuthRequest';
 import Container from 'typedi';
-import AuthService from '../../services/auth';
+import UserService from '../../services/user';
 import isAuth from '../middlewares/isAuth';
 
 const route = Router();
@@ -20,23 +20,23 @@ export default (app: Router) => {
       return;
     }
 
-    const authService = Container.get(AuthService);
+    const userService = Container.get(UserService);
 
-    const user = await authService.getUser(email);
+    const user = await userService.getUser(email);
 
     if (!user) {
       res.status(404).send({ msg: 'User not found' });
       return;
     }
 
-    const isPwValid = await authService.isPasswordValid(password, user.pw);
+    const isPwValid = await userService.isPasswordValid(password, user.pw);
 
     if (!isPwValid) {
       res.status(401).send({ msg: 'Password Incorrect' });
       return;
     }
 
-    const cred = await authService.updateUserRefreshToken(user.id);
+    const cred = await userService.updateUserRefreshToken(user.id);
 
     res.send({
       result: {
@@ -54,17 +54,17 @@ export default (app: Router) => {
       return;
     }
 
-    const authService = Container.get(AuthService);
+    const userService = Container.get(UserService);
 
-    const user = await authService.getUser(email);
+    const user = await userService.getUser(email);
 
     if (user) {
       res.status(400).send({ msg: 'Email already exists' });
       return;
     }
 
-    const newUser = await authService.createUser(email, password);
-    const cred = await authService.updateUserRefreshToken(newUser.id);
+    const newUser = await userService.createUser(email, password);
+    const cred = await userService.updateUserRefreshToken(newUser.id);
 
     res.send({
       result: {
@@ -82,23 +82,23 @@ export default (app: Router) => {
       return;
     }
 
-    const authService = Container.get(AuthService);
+    const userService = Container.get(UserService);
 
-    const user = await authService.getUser(email);
+    const user = await userService.getUser(email);
 
     if (!user) {
       res.status(404).send({ msg: 'User not found' });
       return;
     }
 
-    const isPwValid = await authService.isPasswordValid(password, user.pw);
+    const isPwValid = await userService.isPasswordValid(password, user.pw);
 
     if (!isPwValid) {
       res.status(401).send({ msg: 'Password Incorrect' });
       return;
     }
 
-    const isTokenValid = await authService.isRefreshTokenValid(
+    const isTokenValid = await userService.isRefreshTokenValid(
       refreshToken,
       user.id
     );
@@ -108,7 +108,7 @@ export default (app: Router) => {
       return;
     }
 
-    const cred = await authService.updateUserRefreshToken(user.id);
+    const cred = await userService.updateUserRefreshToken(user.id);
 
     res.send({
       result: {

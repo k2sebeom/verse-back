@@ -6,7 +6,7 @@ import { getCredentials, validateToken } from '../utils/token';
 import { Credentials } from '../@types/Auth';
 
 @Service()
-export default class AuthService {
+export default class UserService {
   public getUser = async (email: string): Promise<Auth | null> => {
     const user = await db.auth.findUnique({
       where: { email },
