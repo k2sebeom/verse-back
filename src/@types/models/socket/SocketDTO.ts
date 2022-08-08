@@ -1,6 +1,6 @@
 
 interface JoinRequest {
-    nickName: string;
+    nickname: string;
     spriteName: string;
     pos: number[];
 }
