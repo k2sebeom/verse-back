@@ -29,7 +29,14 @@ export default async (io: Server) => {
         socket.on('transform', (data) => {
           socket.broadcast.to(id).emit('transform', { ...data, id: socket.id });
           roomService.updatePlayer(parseInt(id), socket.id, data.pos);
-        })
+        });
+
+        socket.on('name', (data) => {
+          socket.broadcast.to(id).emit('name', {
+            id: socket.id,
+            name: data
+          });
+        });
 
         socket.on('disconnect', (reason) => {
           console.log(`${socket.id} disconnected`);
