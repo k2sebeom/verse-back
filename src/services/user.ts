@@ -35,6 +35,16 @@ export default class UserService {
     }
   };
 
+  public getRandomUser = async (): Promise<User> => {
+    const count = await db.user.count();
+    const skip = Math.floor(Math.random() * count);
+    const users = await db.user.findMany({
+      take: 1,
+      skip
+    })
+    return users[0];
+  }
+
   public register = async (museId: number): Promise<User> => {
     const stream = await this.muxClient.Video.LiveStreams.create({
       playback_policy: 'public',

@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Response, Request } from 'express';
 import Container from 'typedi';
 import { RegisterRequest } from '../../@types/models/AuthRequest';
 import { GetMusicianRequest } from '../../@types/models/UserRequest';
@@ -31,6 +31,15 @@ export default (app: Router) => {
             streamKey: newUser.streamKey
         });
     }
+  })
+
+  route.get('/random', async (req: Request, res: Response) => {
+    const userService = Container.get(UserService);
+    const user = await userService.getRandomUser();
+
+    res.send({
+        museId: user.museId
+    });
   })
 
   route.get('/musician/:id', async (req: GetMusicianRequest, res: Response) => {
