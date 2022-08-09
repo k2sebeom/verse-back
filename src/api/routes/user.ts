@@ -70,6 +70,7 @@ export default (app: Router) => {
 
     res.send({
         id: user.id,
+        alias: user.museAlias,
         points: user.points,
         liveUrl: user.liveUrl
     });
