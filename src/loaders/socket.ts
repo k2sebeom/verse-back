@@ -12,6 +12,8 @@ export default async (io: Server) => {
         socket.join(id);
         console.log(`${socket.id} joined room ${id}`);
 
+        socket.emit('id', socket.id);
+
         const roomService = Container.get(RoomService);
         roomService.addPlayer(parseInt(id), { ...data, id: socket.id });
 
@@ -48,6 +50,13 @@ export default async (io: Server) => {
         socket.on('reaction', (data) => {
           socket.broadcast.to(id).emit('reaction', { ...data, id: socket.id });
         });
+
+        socket.on('leave', (socketId) => {
+          roomService.removePlayer(parseInt(id), socketId);
+          io.to(id).emit('leave', {
+            id: socketId
+          })
+        })
 
         socket.on('disconnect', (reason) => {
           console.log(`${socket.id} disconnected`);
