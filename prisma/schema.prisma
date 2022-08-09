@@ -16,15 +16,10 @@ enum Role {
 }
 
 model User {
-  id           Int    @id @default(autoincrement())
-  email        String @unique
-  pw           String
-  nickname     String
-  refreshToken String @default("")
-  role         Role   @default(AUDIENCE)
-  points       Int    @default(500)
+  id     Int @id @default(autoincrement())
+  museId Int @unique
 
-  streamKey String?
-  liveUrl   String?
-  tracks    String[]
+  points    Int    @default(500)
+  streamKey String
+  liveUrl   String
 }
