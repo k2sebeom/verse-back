@@ -11,8 +11,9 @@ datasource db {
 }
 
 model User {
-  id     Int @id @default(autoincrement())
-  museId Int @unique
+  id        Int    @id @default(autoincrement())
+  museId    Int    @unique
+  museAlias String
 
   points    Int    @default(500)
   streamKey String

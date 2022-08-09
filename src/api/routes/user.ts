@@ -10,7 +10,12 @@ export default (app: Router) => {
   app.use('/user', route);
 
   route.post('/register', async (req: RegisterRequest, res: Response) => {
-    const { museId } = req.body;
+    const { museId, museAlias } = req.body;
+
+    if(!museAlias || !museId) {
+        res.sendStatus(400);
+        return;
+    }
 
     const userService = Container.get(UserService);
 
@@ -24,7 +29,7 @@ export default (app: Router) => {
         });
     }
     else {
-        const newUser = await userService.register(museId);
+        const newUser = await userService.register(museId, museAlias);
         res.send({
             id: newUser.id,
             points: newUser.points,

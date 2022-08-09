@@ -45,7 +45,7 @@ export default class UserService {
     return users[0];
   }
 
-  public register = async (museId: number): Promise<User> => {
+  public register = async (museId: number, museAlias: string): Promise<User> => {
     const stream = await this.muxClient.Video.LiveStreams.create({
       playback_policy: 'public',
       new_asset_settings: {
@@ -61,6 +61,7 @@ export default class UserService {
     return await db.user.create({
       data: {
         museId,
+        museAlias,
         streamKey, liveUrl
       },
     });
