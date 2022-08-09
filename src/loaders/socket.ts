@@ -45,6 +45,10 @@ export default async (io: Server) => {
           }, 20000);
         });
 
+        socket.on('reaction', (data) => {
+          socket.broadcast.to(id).emit('reaction', { ...data, id: socket.id });
+        });
+
         socket.on('disconnect', (reason) => {
           console.log(`${socket.id} disconnected`);
           roomService.removePlayer(parseInt(id), socket.id);
