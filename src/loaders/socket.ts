@@ -15,7 +15,7 @@ export default async (io: Server) => {
         socket.emit('id', socket.id);
 
         const roomService = Container.get(RoomService);
-        roomService.addPlayer(parseInt(id), { ...data, id: socket.id });
+        roomService.addPlayer(parseInt(id), { ...data, id: socket.id, tokenId: -1 });
 
         socket.emit('members', {
           id: socket.id,
@@ -49,6 +49,11 @@ export default async (io: Server) => {
 
         socket.on('reaction', (data) => {
           socket.broadcast.to(id).emit('reaction', { ...data, id: socket.id });
+        });
+
+        socket.on('vinyl', (data) => {
+          socket.broadcast.to(id).emit('vinyl', { ...data, id: socket.id });
+          roomService.setPlayerToken(parseInt(id), socket.id, data.tokenId);
         });
 
         socket.on('leave', (socketId) => {

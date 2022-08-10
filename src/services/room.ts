@@ -1,7 +1,5 @@
 import { Service } from 'typedi';
-import db from '../utils/db';
 import { Player } from '../@types/Room';
-import e = require('express');
 
 
 @Service()
@@ -24,6 +22,12 @@ export default class RoomService {
     public setPlayerName(roomId: number, playerId: string, nickname: string) {
         if(this.rooms[roomId]) {
             this.rooms[roomId][playerId].nickname = nickname;
+        }
+    }
+
+    public setPlayerToken(roomId: number, playerId: string, tokenId: number) {
+        if(this.rooms[roomId]) {
+            this.rooms[roomId][playerId].tokenId = tokenId;
         }
     }
 
