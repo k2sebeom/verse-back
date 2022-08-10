@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 import Container from 'typedi';
 import { RegisterRequest } from '../../@types/models/AuthRequest';
-import { GetMusicianRequest } from '../../@types/models/UserRequest';
+import { GetMusicianRequest, GetRtcTokenRequest } from '../../@types/models/UserRequest';
 import UserService from '../../services/user';
 
 const route = Router();
@@ -36,6 +36,22 @@ export default (app: Router) => {
             streamKey: newUser.streamKey
         });
     }
+  })
+
+  route.post('/token', async (req: GetRtcTokenRequest, res: Response) => {
+    const { channelName, account } = req.body;
+
+    if(!channelName || !account) {
+        res.sendStatus(400);
+        return;
+    }
+
+    const userService = Container.get(UserService);
+    const token = userService.getRtcToken(channelName, account);
+
+    res.send({
+        token
+    });
   })
 
   route.get('/random', async (req: Request, res: Response) => {

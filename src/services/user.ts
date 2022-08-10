@@ -3,6 +3,7 @@ import db from '../utils/db';
 import { User } from '@prisma/client';
 import Mux from '@mux/mux-node';
 import config from '../config';
+import Agora from 'agora-access-token';
 
 
 @Service()
@@ -65,5 +66,16 @@ export default class UserService {
         streamKey, liveUrl
       },
     });
+  }
+
+  public getRtcToken = (channelName: string, account: string): string => {
+    const expirationTimeInSeconds = 3600
+ 
+    const currentTimestamp = Math.floor(Date.now() / 1000)
+     
+    const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
+
+    const tokenB = Agora.RtcTokenBuilder.buildTokenWithAccount(config.agoraId, config.agoraCert, channelName, account, Agora.RtcRole.PUBLISHER, privilegeExpiredTs);
+    return tokenB;
   }
 }
